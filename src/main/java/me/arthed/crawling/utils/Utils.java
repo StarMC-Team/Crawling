@@ -13,12 +13,6 @@ import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 public class Utils {
 
     public static BlockData BARRIER_BLOCK_DATA = Bukkit.createBlockData(Material.BARRIER);
@@ -69,7 +63,7 @@ public class Utils {
         double distanceLimit = facing.distance;
 
         // Trapdoors
-        if (BlockUtils.trapdoorMaterial.contains(lowerBlock.getType())) {
+        if (BlockUtils.trapdoorMaterials.contains(lowerBlock.getType())) {
             TrapDoor type = (TrapDoor) lowerBlock.getBlockData();
 
             return type.getFacing() != player.getFacing() || !type.isOpen();

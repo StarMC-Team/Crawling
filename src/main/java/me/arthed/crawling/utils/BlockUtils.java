@@ -17,7 +17,7 @@ public class BlockUtils {
                     .filter(e -> e.name().endsWith("SLAB"))
                     .collect(Collectors.toList());
 
-    public static List<Material> trapdoorMaterial =
+    public static List<Material> trapdoorMaterials =
             Stream.of(Material.values())
                     .filter(e -> e.name().endsWith("TRAPDOOR"))
                     .collect(Collectors.toList());
