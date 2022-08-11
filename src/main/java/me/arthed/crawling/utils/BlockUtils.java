@@ -7,12 +7,20 @@ import org.bukkit.Material;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BlockUtils {
+    public static List<Material> slabMaterials =
+            Stream.of(Material.values())
+                    .filter(e -> e.name().endsWith("SLAB"))
+                    .collect(Collectors.toList());
+
+    public static List<Material> trapdoorMaterial =
+            Stream.of(Material.values())
+                    .filter(e -> e.name().endsWith("TRAPDOOR"))
+                    .collect(Collectors.toList());
 
     public static Set<Material> nonFullBlocks = new HashSet<>();
     public static Map<Material, Material> similarSoundBlocks = new HashMap<>();

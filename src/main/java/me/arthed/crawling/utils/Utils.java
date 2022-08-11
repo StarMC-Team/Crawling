@@ -9,9 +9,15 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.Slab;
+import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Utils {
 
@@ -59,9 +65,24 @@ public class Utils {
 
         Location location = player.getLocation().add(facing.xOffset, 1, facing.zOffset);
         Block block = location.getBlock();
+        Block lowerBlock = location.clone().subtract(0, 1, 0).getBlock();
         double distanceLimit = facing.distance;
 
+        // Trapdoors
+        if (BlockUtils.trapdoorMaterial.contains(lowerBlock.getType())) {
+            TrapDoor type = (TrapDoor) lowerBlock.getBlockData();
+
+            return type.getFacing() != player.getFacing() || !type.isOpen();
+        }
+
+        // Default logic
         if (block.getType().isSolid() && location.subtract(0, 1, 0).getBlock().isPassable()) {
+            // Block Slab.Type.TOP from crawling
+            if (BlockUtils.slabMaterials.contains(block.getType()) && block.getBlockData() instanceof Slab slab) {
+                Slab.Type type = slab.getType();
+
+                return type == Slab.Type.BOTTOM;
+            }
             if (facing.equals(WallFace.EAST) || facing.equals(WallFace.WEST)) {
                 return Math.abs(location.getX() - block.getX()) < distanceLimit;
             }
