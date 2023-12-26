@@ -1,32 +1,37 @@
-package me.arthed.nms.v1_14;
+package me.arthed.crawling.nms.v1_20_2;
 
 import me.arthed.nms.NmsPackets;
-import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.network.protocol.game.PacketPlayOutEntityDestroy;
+import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
+import net.minecraft.network.protocol.game.PacketPlayOutSpawnEntity;
+import net.minecraft.network.syncher.DataWatcher;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.phys.Vec3D;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_14_R1.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public final class NmsPackets_v1_14 implements NmsPackets {
+public class NmsPackets_v1_20_2 implements NmsPackets {
 
     private final int blockId = -8854;
     private final int floorBlockId = -8855;
     private final DataWatcher dataWatcher;
 
-    public NmsPackets_v1_14() {
+    public NmsPackets_v1_20_2() {
         World world = Bukkit.getWorlds().get(0);
         FallingBlock fallingBlock = (FallingBlock) world.spawnEntity(new Location(world, 0, 0, 0), EntityType.FALLING_BLOCK);
         fallingBlock.setGravity(false);
-        this.dataWatcher = ((CraftEntity)fallingBlock).getHandle().getDataWatcher();
+        this.dataWatcher = ((CraftEntity)fallingBlock).getHandle().al();
         fallingBlock.remove();
     }
 
@@ -39,11 +44,12 @@ public final class NmsPackets_v1_14 implements NmsPackets {
                 block.getZ() + 0.5,
                 0, //yaw
                 0, //pitch
-                EntityTypes.FALLING_BLOCK,
-                net.minecraft.server.v1_14_R1.Block.getCombinedId(((CraftBlock)block).getNMS()), //material id
-                new Vec3D(0, 1, 0) // velocity
+                EntityTypes.C,
+                net.minecraft.world.level.block.Block.i(((CraftBlock)block).getNMS()), //material id
+                new Vec3D(0, 1, 0), // velocity
+                1
         );
-        PacketPlayOutEntityMetadata blockMetadataPacket = new PacketPlayOutEntityMetadata(this.blockId, this.dataWatcher, true);
+        PacketPlayOutEntityMetadata blockMetadataPacket = new PacketPlayOutEntityMetadata(this.blockId, this.dataWatcher.b());
         PacketPlayOutSpawnEntity spawnBlockPacket2 = new PacketPlayOutSpawnEntity(
                 this.floorBlockId,
                 UUID.randomUUID(), // entity uuid
@@ -52,23 +58,24 @@ public final class NmsPackets_v1_14 implements NmsPackets {
                 floorBlock.getZ() + 0.5,
                 90, //yaw
                 0, //pitch
-                EntityTypes.FALLING_BLOCK,
-                net.minecraft.server.v1_14_R1.Block.getCombinedId(((CraftBlock)floorBlock).getNMS()), //material id
-                new Vec3D(0, 1, 0) // velocity
+                EntityTypes.C,
+                net.minecraft.world.level.block.Block.i(((CraftBlock)floorBlock).getNMS()), //material id
+                new Vec3D(0, 1, 0), // velocity
+                1
         );
-        PacketPlayOutEntityMetadata blockMetadataPacket2 = new PacketPlayOutEntityMetadata(this.floorBlockId, this.dataWatcher, true);
-        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(spawnBlockPacket);
-        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(blockMetadataPacket);
-        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(spawnBlockPacket2);
-        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(blockMetadataPacket2);
+        PacketPlayOutEntityMetadata blockMetadataPacket2 = new PacketPlayOutEntityMetadata(this.floorBlockId, this.dataWatcher.b());
+        ((CraftPlayer)player).getHandle().c.a(spawnBlockPacket);
+        ((CraftPlayer)player).getHandle().c.a(blockMetadataPacket);
+        ((CraftPlayer)player).getHandle().c.a(spawnBlockPacket2);
+        ((CraftPlayer)player).getHandle().c.a(blockMetadataPacket2);
         player.sendBlockChange(floorBlock.getLocation(), fakeFloorMaterial == null ? Bukkit.createBlockData(Material.STONE) : Bukkit.createBlockData(fakeFloorMaterial));
     }
 
     public void removeFakeBlocks(Player player) {
         PacketPlayOutEntityDestroy destroyOldBlockPacket = new PacketPlayOutEntityDestroy(this.blockId);
         PacketPlayOutEntityDestroy destroyOldBlockPacket2 = new PacketPlayOutEntityDestroy(this.blockId-1);
-        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(destroyOldBlockPacket);
-        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(destroyOldBlockPacket2);
+        ((CraftPlayer)player).getHandle().c.a(destroyOldBlockPacket);
+        ((CraftPlayer)player).getHandle().c.a(destroyOldBlockPacket2);
     }
 
 
