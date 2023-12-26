@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.TrapDoor;
@@ -58,6 +59,7 @@ public class Utils {
         WallFace facing = WallFace.fromBlockFace(player.getFacing());
 
         Location location = player.getLocation().add(facing.xOffset, 1, facing.zOffset);
+        Block bottomPlayer = player.getLocation().getBlock();
         Block block = location.getBlock();
         Block lowerBlock = location.clone().subtract(0, 1, 0).getBlock();
         double distanceLimit = facing.distance;
@@ -65,8 +67,24 @@ public class Utils {
         // Trapdoors
         if (BlockUtils.trapdoorMaterials.contains(lowerBlock.getType())) {
             TrapDoor type = (TrapDoor) lowerBlock.getBlockData();
+            if(BlockUtils.trapdoorMaterials.contains(bottomPlayer.getType())) {
+                TrapDoor bottomPlayerTrap = (TrapDoor) bottomPlayer.getBlockData();
+                Bisected.Half half = bottomPlayerTrap.getHalf();
+                return !(half == Bisected.Half.BOTTOM);
+            }
 
             return type.getFacing() != player.getFacing() || !type.isOpen();
+        }
+
+        if(BlockUtils.trapdoorMaterials.contains(block.getType())) {
+            TrapDoor type = (TrapDoor) block.getBlockData();
+            if(type.getHalf() == Bisected.Half.TOP) {
+                return false;
+            }
+        }
+
+        if(BlockUtils.slabMaterials.contains(bottomPlayer.getType()) && bottomPlayer.getBlockData() instanceof Slab slab) {
+            return false;
         }
 
         // Default logic
