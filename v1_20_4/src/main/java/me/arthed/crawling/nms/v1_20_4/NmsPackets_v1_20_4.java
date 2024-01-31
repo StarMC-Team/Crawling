@@ -1,4 +1,4 @@
-package me.arthed.crawling.nms.v1_20_2;
+package me.arthed.crawling.nms.v1_20_4;
 
 import me.arthed.nms.NmsPackets;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityDestroy;
@@ -12,26 +12,26 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R3.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class NmsPackets_v1_20_2 implements NmsPackets {
+public class NmsPackets_v1_20_4 implements NmsPackets {
 
     private final int blockId = -8854;
     private final int floorBlockId = -8855;
     private final DataWatcher dataWatcher;
 
-    public NmsPackets_v1_20_2() {
+    public NmsPackets_v1_20_4() {
         World world = Bukkit.getWorlds().get(0);
         FallingBlock fallingBlock = (FallingBlock) world.spawnEntity(new Location(world, 0, 0, 0), EntityType.FALLING_BLOCK);
         fallingBlock.setGravity(false);
-        this.dataWatcher = ((CraftEntity)fallingBlock).getHandle().al();
+        this.dataWatcher = ((CraftEntity)fallingBlock).getHandle().an();
         fallingBlock.remove();
     }
 

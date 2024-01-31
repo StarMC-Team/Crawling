@@ -7,7 +7,7 @@ import me.arthed.crawling.listeners.PlayerDeathListener;
 import me.arthed.crawling.listeners.PlayerInteractListener;
 import me.arthed.crawling.listeners.SneakingListener;
 import me.arthed.crawling.listeners.SwimmingToggleListener;
-import me.arthed.crawling.nms.v1_20_2.NmsPackets_v1_20_2;
+import me.arthed.crawling.nms.v1_20_4.NmsPackets_v1_20_4;
 import me.arthed.crawling.utils.BlockUtils;
 import me.arthed.crawling.utils.MetricsLite;
 import me.arthed.crawling.utils.UpdateManager;
@@ -50,8 +50,8 @@ public class Crawling extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         //Check if version is compatible and set the proper nms packet manager
-        if (Bukkit.getVersion().contains("1.20.2")) {
-            this.nmsPacketManager = new NmsPackets_v1_20_2();
+        if (Bukkit.getVersion().contains("1.20.4")) {
+            this.nmsPacketManager = new NmsPackets_v1_20_4();
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSorry, this plugin works only on 1.14 or higher versions."));
             Bukkit.getPluginManager().disablePlugin(plugin);
